@@ -1,0 +1,116 @@
+.img-fluid {
+  width: 100%;
+  max-width: 275px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* HIDE RADIO */
+[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  border-color: #0275d8;
+  box-shadow: inset 0 1px 1px rgba(2, 117, 216, 0.075), 0 0 8px rgba(2, 117, 216, 0.6);
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.confirm {
+  color: green;
+}
+
+.island {
+  padding: 1rem;
+  margin: 12px;
+  background-color: #fff;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -ms-flex-negative: 1;
+      flex-shrink: 1;
+  -ms-flex-preferred-size: 400px;
+      flex-basis: 400px;
+  border-radius: 3px;
+  overflow: auto; 
+}
+
+.fieldset {
+  display: block;
+  border: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 12px; }
+
+.fieldset legend {
+  padding: 0;
+  width: 100%;
+  margin-bottom: 8px;
+  margin-top: 16px; }
+
+.fieldset .btn {
+  margin-right: 4px;
+  margin-bottom: 8px; }
+
+.field {
+  display: block;
+  margin-bottom: 20px; }
+
+.section {
+  display: block;
+  margin-top: 1.5rem; }
+
+  .label {
+    position: relative;
+    font-size: 12px;
+    font-weight: 400;
+    display: block;
+    padding-bottom: 6px; }
+  
+  .label--progressbar {
+    float: right;
+    margin-bottom: -10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    line-height: 1rem;
+    color: #191919; }
+  
+  .inputfield {
+    font-family: "BerninaSans", "Open Sans", sans-serif;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    text-decoration: none;
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 11px;
+    padding-right: 11px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 32px;
+    line-height: -moz-block-height;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+    color: #454646; }

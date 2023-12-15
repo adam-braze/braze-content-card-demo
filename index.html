@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Front-End</title>
+  <link rel="shortcut icon" type="image/jpg"
+    href="https://braze-front-end.s3.amazonaws.com/Braze-Logo-Monogram-White-3x.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/font-awesome.css">
+
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+  <link href="./css/main.css" rel="stylesheet" />
+
+  <script type="text/javascript">
+    +function (a, p, P, b, y) {
+      a.braze = {}; a.brazeQueue = []; for (var s = "BrazeSdkMetadata DeviceProperties Card Card.prototype.dismissCard Card.prototype.removeAllSubscriptions Card.prototype.removeSubscription Card.prototype.subscribeToClickedEvent Card.prototype.subscribeToDismissedEvent Card.fromContentCardsJson Banner CaptionedImage ClassicCard ControlCard ContentCards ContentCards.prototype.getUnviewedCardCount Feed Feed.prototype.getUnreadCardCount ControlMessage InAppMessage InAppMessage.SlideFrom InAppMessage.ClickAction InAppMessage.DismissType InAppMessage.OpenTarget InAppMessage.ImageStyle InAppMessage.Orientation InAppMessage.TextAlignment InAppMessage.CropType InAppMessage.prototype.closeMessage InAppMessage.prototype.removeAllSubscriptions InAppMessage.prototype.removeSubscription InAppMessage.prototype.subscribeToClickedEvent InAppMessage.prototype.subscribeToDismissedEvent InAppMessage.fromJson FullScreenMessage ModalMessage HtmlMessage SlideUpMessage User User.Genders User.NotificationSubscriptionTypes User.prototype.addAlias User.prototype.addToCustomAttributeArray User.prototype.addToSubscriptionGroup User.prototype.getUserId User.prototype.incrementCustomUserAttribute User.prototype.removeFromCustomAttributeArray User.prototype.removeFromSubscriptionGroup User.prototype.setCountry User.prototype.setCustomLocationAttribute User.prototype.setCustomUserAttribute User.prototype.setDateOfBirth User.prototype.setEmail User.prototype.setEmailNotificationSubscriptionType User.prototype.setFirstName User.prototype.setGender User.prototype.setHomeCity User.prototype.setLanguage User.prototype.setLastKnownLocation User.prototype.setLastName User.prototype.setPhoneNumber User.prototype.setPushNotificationSubscriptionType InAppMessageButton InAppMessageButton.prototype.removeAllSubscriptions InAppMessageButton.prototype.removeSubscription InAppMessageButton.prototype.subscribeToClickedEvent FeatureFlag FeatureFlag.prototype.getStringProperty FeatureFlag.prototype.getNumberProperty FeatureFlag.prototype.getBooleanProperty automaticallyShowInAppMessages destroyFeed hideContentCards showContentCards showFeed showInAppMessage toggleContentCards toggleFeed changeUser destroy getDeviceId initialize isPushBlocked isPushPermissionGranted isPushSupported logCardClick logCardDismissal logCardImpressions logContentCardImpressions logContentCardClick logContentCardsDisplayed logCustomEvent logFeedDisplayed logInAppMessageButtonClick logInAppMessageClick logInAppMessageHtmlClick logInAppMessageImpression logPurchase openSession requestPushPermission removeAllSubscriptions removeSubscription requestContentCardsRefresh requestFeedRefresh refreshFeatureFlags requestImmediateDataFlush enableSDK isDisabled setLogger setSdkAuthenticationSignature addSdkMetadata disableSDK subscribeToContentCardsUpdates subscribeToFeedUpdates subscribeToInAppMessage subscribeToSdkAuthenticationFailures toggleLogging unregisterPush wipeData handleBrazeAction subscribeToFeatureFlagsUpdates getAllFeatureFlags".split(" "), i = 0; i < s.length; i++) { for (var m = s[i], k = a.braze, l = m.split("."), j = 0; j < l.length - 1; j++)k = k[l[j]]; k[l[j]] = (new Function("return function " + m.replace(/\./g, "_") + "(){window.brazeQueue.push(arguments); return true}"))() } window.braze.getCachedContentCards = function () { return new window.braze.ContentCards }; window.braze.getCachedFeed = function () { return new window.braze.Feed }; window.braze.getUser = function () { return new window.braze.User }; window.braze.getFeatureFlag = function () { return new window.braze.FeatureFlag }; (y = p.createElement(P)).type = 'text/javascript';
+      y.src = 'https://js.appboycdn.com/web-sdk/4.6/braze.min.js';
+      y.async = 1; (b = p.getElementsByTagName(P)[0]).parentNode.insertBefore(y, b)
+    }(window, document, 'script');
+
+    let BCards;
+
+    if (localStorage.getItem("baseUrl") === null) {
+      localStorage.setItem("baseUrl","https://sondheim.braze.com");
+      localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
+    } 
+    // initialize the SDK
+    braze.initialize(localStorage.api_key, {
+      baseUrl: localStorage.baseUrl,
+      enableLogging: true,
+      allowUserSuppliedJavascript: true,
+      minimumIntervalBetweenTriggerActionsInSeconds: 5
+    });
+
+    // optionally show all in-app messages without custom handling
+
+    //braze.automaticallyShowInAppMessages();
+    braze.subscribeToInAppMessage(function(inAppMessage) {
+
+      // check if message is not a control variant
+      if (!(inAppMessage.isControl)) {
+        // access the key-value pairs, defined as `extras`
+        const keyValuePairs = inAppMessage.extras || {};
+        // check the value of our key `msg-id` defined in the Braze dashboard
+        if (keyValuePairs["msg_id"] === "card") {
+          // We don't want to display the push prompt to users on browsers
+          // do not call `showInAppMessage`
+          $("#tile1").empty();
+          $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
+          return;
+        }
+      }
+
+      // show the in-app message now
+      braze.showInAppMessage(inAppMessage);
+    });
+
+    // if you use Content Cards
+    braze.subscribeToContentCardsUpdates(function (updates) {
+      // cards have been updated
+      BCards = updates.cards;
+      let render = false;
+      //do something with the latest instance of 'cards'
+      console.log("Braze - subscribeToContentCardsUpdates: ", updates.cards);
+      //This will be invoked every time the feed is successfully refreshed following a
+      //requestContentCardsRefresh() request
+      //Here you can render the cards to the UI as well as logging impressions.
+      $("#board").empty();
+      $("#board").append("<div class='Containers'> <div class='MessageInfo'> 1/1 (image ratio: 3000 x 1200) </div><img src='./rs/wireframe_SX3000_.jpg' style='width:100%'><div class='Info'>location=hero</div> </div>");
+      $("#collapsible_banner").empty();
+      $("#onboarding_set").empty();
+     
+      
+      for (let i = 0; i < BCards.length; i++) {
+        if (BCards[i].extras.location == "hero") {
+          //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
+          $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
+          //$("#navigation").append("style='display=block';");
+          render = true;
+        }
+        if (BCards[i].extras.location=="tile_1") {
+          if (BCards[i].extras.type=="asset") {
+            $("#tile1").empty();
+            $("#tile1").append("<br>");
+            $("#tile1").append("<label><input class='img-fluid col-sm-4' type='radio' name='template-pick' value='9b74cac7-8946-46c4-95af-607444920bdd'>");
+            $("#tile1").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
+            $("#tile1").append("<div style='text-align: center;'><p>" + BCards[i].title + "</p></div>");
+          }
+          else {
+          $("#recommendation_header").empty();
+          $("#recommendation_header").append("<p><h3>&nbsp;&nbsp;Recommendation based recent workout completed:</h3></p>");
+          $("#tile1").empty();
+          $("#tile1").append("<p>&nbsp;</p>");
+          $("#tile1").append("<div style='width: 280px;'>");
+          $("#tile1").append("<label>");
+          $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+          $("#tile1").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
+          $("#tile1").append("<h3>" + BCards[i].title + "</h3>");
+          $("#tile1").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
+          $("#tile1").append("<div style='color:grey; padding-block: 4px; text-align: right;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
+          $("#tile1").append("</div></div>");
+          //braze.logContentCardImpressions(BCards[i]);
+        }
+      }
+        if (BCards[i].extras.location=="tile_2") {
+          $("#tile2").empty();
+          $("#tile2").append("<p>&nbsp;</p>");
+          $("#tile2").append("<div style='width: 280px;'>");
+          $("#tile2").append("<label>");
+          $("#tile2").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+          $("#tile2").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
+          $("#tile2").append("<h3>" + BCards[i].title + "</h3>");
+          $("#tile2").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
+          $("#tile2").append("<div style='color:grey; padding-block: 4px; text-align: right;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
+          $("#tile2").append("</div></div>");
+        }
+        if (BCards[i].extras.location == "tile_3") {
+          $("#tile3").empty();
+          $("#tile3").append("<p>&nbsp;</p>");
+          $("#tile3").append("<div style='width: 280px;'>");
+          $("#tile3").append("<label>");
+          $("#tile3").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+          $("#tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
+          $("#tile3").append("<h3>" + BCards[i].title + "</h3>");
+          $("#tile3").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
+          $("#tile3").append("<div style='color:grey; padding-block: 4px; text-align: center;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
+          $("#tile3").append("</div></div>");
+        }
+        if (BCards[i].extras.location == "collapsible_banner") {
+          $("#collapsible_banner").append("<img src='" + BCards[i].imageUrl +"' style='width:100%;height:auto'><div style='color: #222222; font-size: 25px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'><p><b>" + BCards[i].title + "</b></p><span style='font-size:20px'>" + BCards[i].description + "</span></div>");
+          if (BCards[i].linkText != "") {
+            $("#collapsible_banner").append("<div style='position:absolute;bottom:100px;right:100px'><a id='collapsible_banner_link' href='" + BCards[i].url + "' style='font-size:17px;;border:none; border-radius:5px;display:inline-block;padding:10px 28px;vertical-align:middle;overflow:hidden;text-align:center;cursor:pointer;white-space:nowrap;user-select:none;background-color:#04AA6D;color:#ffffff;'>" + BCards[i].linkText + "</a></div>");
+          }          
+          $("#collapsible_banner").append("<div style='position:absolute;top:8px;right:16px;font-size:18px'><a id='collapsible_banner_close' style='color:#bbbbbb' href='#'>X</a></div>");
+          $("#collapsible_banner_link").click(function(){ braze.logContentCardClick(BCards[i]); return true; });
+          $("#collapsible_banner_close").click(function(){ braze.logCardDismissal(BCards[i]); $("#collapsible_banner").fadeOut(); });
+          let viewedcards = new Array(BCards[i]);
+          braze.logContentCardImpressions(viewedcards);
+        }
+
+        if (BCards[i].extras.location =='ob_tile_1') {
+          $("#onboarding_header").empty();
+          $("#onboarding_header").append("<p><h3>&nbsp;&nbsp;Getting started:!</h3></p>");
+          
+          $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
+  
+        }
+        if (BCards[i].extras.location =='ob_tile_2') {
+          $("#onboarding_header").empty();
+          $("#onboarding_header").append("<p><h3>&nbsp;&nbsp;Get the most of Sweat!</h3></p>");
+          //$("#onboarding_set1").empty();
+          //$("#onboarding_set1").append("<p><h3>&nbsp;&nbsp;Get the most of Sweat!</h3></p>");
+          //$("#ob_tile2").empty();
+          //$("#ob_tile2").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a>");
+          $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
+        }
+        if (BCards[i].extras.location =='ob_tile_3') {
+          $("#onboarding_header").empty();
+          $("#onboarding_header").append("<p><h3>&nbsp;&nbsp;Get the most of Sweat!</h3></p>");
+          //$("#onboarding_set1").empty();
+          //$("#onboarding_set1").append("<p><h3>&nbsp;&nbsp;Get the most of Sweat!</h3></p>");
+          //$("#ob_tile3").empty();
+          //$("#ob_tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "''></a>");
+          $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
+        }
+
+      }
+
+      
+
+      if (render == false) {
+        //console.log("No personalised content card ", render);
+        $("#board").append("<div id='navigation' style='display:none;'><a class='Back' onclick='minusSlides(1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a></div>")
+      } else {
+        $("#board").append("<div id='navigation' style='display:block;'><a class='Back' onclick='minusSlides(1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a></div>")
+      }
+      
+      SlideShow(1);
+
+      braze.getUser().getUserId(function(userId) {
+          $("#usertag").html("userId: " + userId);
+        });
+
+    });
+
+    // Be sure to call `openSession` after `automaticallyShowInAppMessages`
+    braze.openSession();
+    braze.requestContentCardsRefresh();
+
+  </script>
+</head>
+
+<body>
+
+  <div id="Tab" class="container">
+
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+      <b>Brand</b>
+      <div style="float:right;min-width: 20%;">
+        <button id="btn_refresh" title="requestContentCardsRefresh">&nbsp;</button><button id="btn_show" title="showContentCards">&nbsp;</button>&nbsp;<div style="float:right;color: grey;" id="usertag"></div></div>
+    </div>
+    <!-- End -- Jumbotron -->
+    <!-- Tabs -->
+    <div class="col-lg-12">
+      <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill"
+            href="index.html">Home</a></li>
+        <li class=""><a data-toggle="pill" href="navigation.html">Navigation</a></li>
+        <li class=""><a data-toggle="pill" href="news.html">News</a></li>
+        <li class=""><a data-toggle="pill" href="settings.html">Settings</a></li>
+      </ul>
+      
+    </div>
+    <!-- End -- Tabs -->
+
+    <div class="tab-content">
+      <div class="tab-pane fade active in" id="email">
+        <p>&nbsp;</p>
+      </div>
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <!-- End -- Spacer -->
+
+      <!-- 1-column -->
+      <div class="row">
+        <!--<div class="col-lg-10">-->
+        <!-- hero image carousel here-->
+        <div id="board" class="slideshow-container">
+
+          <!-- hero banner section here -->
+          
+        </div>
+        <br>
+
+        <!-- The circles/dots -->
+        <!--<div style="text-align:center">
+            <span class="dots" onclick="currentSlide(1)"></span>
+            <span class="dots" onclick="currentSlide(2)"></span>
+            <span class="dots" onclick="currentSlide(3)"></span>
+          </div>-->
+
+      </div>
+      <!-- End -- 1-column -->
+
+      <div class="row">
+        <div id="collapsible_banner" style="position: relative; text-align: center;">
+        </div>
+      </div>
+      <div class="row">
+        <div id="trainer_message">
+      
+        </div>
+      </div>
+
+      <div class="col-xs-12" style="height:10px;"></div>
+      <!-- End -- 1-column -->
+      
+      <div class="row" >
+        <div id="onboarding_header" ></div>
+        <div id="onboarding_set" >
+          <div id="ob_tile1" class="col-sm-4" >
+           
+          </div>
+          <div id="ob_tile2" class="col-sm-4" >
+          
+          </div>
+          <div id="ob_tile3" class="col-sm-4" >
+           
+          </div>
+        </div>
+      </div>
+      
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <div class="col-xs-12" style="height:10px;"></div>
+      <div class="col-xs-12" style="height:10px;"></div>
+
+      <!-- 3-column -->
+      <div class="row">
+        <div id="recommendation_header" ></div>
+        <div id="tile1" class="col-sm-4" style="background-color: #eeeeee;">
+          <!--<h3>Tile 1</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
+          <p>&nbsp;</p>
+          <label>
+            <input type="radio" name="template-pick" value="3e4634f6-f9f5-4c14-36b8-de973596e7f5" checked="">
+            <img class="img-fluid" src="./rs/tile1_494_563.png">
+          </label>
+        </div>
+        <div id="tile2" class="col-sm-4" style="background-color: #eeeeee;">
+          <!--<h3>Tile 2</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
+          <p>&nbsp;</p>
+          <label>
+            <input type="radio" name="template-pick" value="3e4634f6-f9f5-4c14-36b8-de973596e7f5" checked="">
+            <img class="img-fluid" src="./rs/tile2_494_563.png">
+          </label>
+        </div>
+        <div id="tile3" class="col-sm-4" style="background-color: #eeeeee;">
+          <!--<h3>Tile 3</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
+          <p>&nbsp; </p>
+          <label>
+            <input class="img-fluid col-sm-4" type="radio" name="template-pick"
+              value="9b74cac7-8946-46c4-95af-607444920bdd" alt="(location:tile_3, image ratio: 494x563)">
+            <img class="img-fluid" src="./rs/tile3_494_563.png" alt="(location:tile_3, image ratio: 494x563)">
+          </label>
+        </div>
+      </div>
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <!-- End -- Spacer -->
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:50px;"></div>
+      <!-- End -- Spacer -->
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+        // forward/Back controls
+      function plusSlides(n) {
+        SlideShow(slidePosition);
+      }
+  
+      function minusSlides(n) {
+        SlideShow(slidePosition - 1);
+      }
+  
+      //  images controls
+      function currentSlide(n) {
+        SlideShow(slidePosition = n);
+      }
+  
+      function SlideShow(n) {
+        var i;
+        var slides = document.getElementsByClassName("Containers");
+        //var circles = document.getElementsByClassName("dots");
+        if (n > slides.length) { slidePosition = 1 }
+        if (n < 1) { slidePosition = slides.length }
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+        //for (i = 0; i < circles.length; i++) {
+        //    circles[i].className = circles[i].className.replace(" enable", "");
+        //}
+        slides[slidePosition - 1].style.display = "block";
+        //circles[slidePosition-1].className += " enable";
+  
+  
+      }
+  
+      function SlideShow() {
+        var i;
+        var slides = document.getElementsByClassName("Containers");
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+        slidePosition++;
+        if (slidePosition > slides.length) { slidePosition = 1 }
+        slides[slidePosition - 1].style.display = "block";
+        //setTimeout(SlideShow, 20000); // Change image every 2 seconds
+      }
+  
+      var slidePosition = 1;
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn_refresh").click(function () {
+        braze.requestContentCardsRefresh();
+        braze.getUser().getUserId(function(userId) {
+          console.log('The user is ' + userId);
+          $("#usertag").html("userId: " + userId);
+        });
+      });
+      $("#btn_show").click(function () {
+        braze.toggleContentCards();
+      });
+    }); </script>
+
+
+</body>
+
+</html>
