@@ -159,9 +159,10 @@
 
     function applyConfig() {
         localStorage.setItem("api_key",document.getElementById('api_key').value);
-        localStorage.setItem("baseUrl",document.getElementById('baseUrl').value)
+        localStorage.setItem("baseUrl",document.getElementById('baseUrl').value);
         
         console.log("Configuration saved into localStorage.");
+        location.reload();
     }
 
     function track() {
