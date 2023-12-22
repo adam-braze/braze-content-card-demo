@@ -41,9 +41,11 @@
 
     //braze.automaticallyShowInAppMessages();
     braze.subscribeToInAppMessage(function(inAppMessage) {
-
    });
 
+   braze.subscribeToContentCardsUpdates(function (updates) {
+   });
+   
     // Be sure to call `openSession` after `automaticallyShowInAppMessages`
     braze.openSession();
     braze.getUser().getUserId(function(userId) {
