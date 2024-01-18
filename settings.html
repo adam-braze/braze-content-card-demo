@@ -179,7 +179,7 @@
         else { 
         jsonData = JSON.parse(s);
         braze.logCustomEvent(eventName, jsonData);
-        braze.requestImmediateDataFlush();
+        
         //console.log("Event " + eventName + " with event properties: " + eventProperties + " logged.");
         }
     }
