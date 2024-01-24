@@ -24,10 +24,11 @@
 
     let BCards;
 
-    if (localStorage.getItem("baseUrl") === null) {
-      localStorage.setItem("baseUrl","https://sondheim.braze.com");
-      localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
-    } 
+    //if (localStorage.getItem("baseUrl") === null) {
+    //  localStorage.setItem("baseUrl","https://sondheim.braze.com");
+    //  localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
+    //}
+    
     // initialize the SDK
     braze.initialize(localStorage.api_key, {
       baseUrl: localStorage.baseUrl,
