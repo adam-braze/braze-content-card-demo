@@ -39,26 +39,26 @@
 
     // optionally show all in-app messages without custom handling
 
-    //braze.automaticallyShowInAppMessages();
-    braze.subscribeToInAppMessage(function(inAppMessage) {
+    braze.automaticallyShowInAppMessages();
+    // braze.subscribeToInAppMessage(function(inAppMessage) {
 
-      // check if message is not a control variant
-      if (!(inAppMessage.isControl)) {
-        // access the key-value pairs, defined as `extras`
-        const keyValuePairs = inAppMessage.extras || {};
-        // check the value of our key `msg-id` defined in the Braze dashboard
-        if (keyValuePairs["msg_id"] === "card") {
-          // We don't want to display the push prompt to users on browsers
-          // do not call `showInAppMessage`
-          $("#tile1").empty();
-          $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
-          return;
-        }
-      }
+    //   // check if message is not a control variant
+    //   if (!(inAppMessage.isControl)) {
+    //     // access the key-value pairs, defined as `extras`
+    //     const keyValuePairs = inAppMessage.extras || {};
+    //     // check the value of our key `msg-id` defined in the Braze dashboard
+    //     if (keyValuePairs["msg_id"] === "card") {
+    //       // We don't want to display the push prompt to users on browsers
+    //       // do not call `showInAppMessage`
+    //       $("#tile1").empty();
+    //       $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
+    //       return;
+    //     }
+    //   }
 
       // show the in-app message now
-      braze.showInAppMessage(inAppMessage);
-    });
+    //  braze.showInAppMessage(inAppMessage);
+    //});
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
@@ -67,9 +67,8 @@
       let render = false;
       //do something with the latest instance of 'cards'
       console.log("Braze - subscribeToContentCardsUpdates: ", updates.cards);
-      //This will be invoked every time the feed is successfully refreshed following a
-      //requestContentCardsRefresh() request
-      //Here you can render the cards to the UI as well as logging impressions.
+      //This will be invoked every time the feed is successfully refreshed following a requestContentCardsRefresh() request
+      //Here you can render the cards to the UI as well as logging impressions and clicks. You can check if the card is a Control here. 
       $("#board").empty();
       $("#board").append("<div class='Containers'> <div class='MessageInfo'> 1/1 (image ratio: 3000 x 1200) </div><img src='./rs/wireframe_SX3000_.jpg' style='width:100%'><div class='Info'>location=hero</div> </div>");
       $("#collapsible_banner").empty();
@@ -78,9 +77,7 @@
       
       for (let i = 0; i < BCards.length; i++) {
         if (BCards[i].extras.location == "hero") {
-          //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
           $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
-          //$("#navigation").append("style='display=block';");
           render = true;
         }
         if (BCards[i].extras.location=="tile_1") {
