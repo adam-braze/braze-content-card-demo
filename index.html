@@ -129,7 +129,12 @@
           $("#tile3").append("</div></div>");
         }
         if (BCards[i].extras.location == "collapsible_banner") {
-          $("#collapsible_banner").append("<img src='" + BCards[i].imageUrl +"' style='width:100%;height:auto'><div style='color: #222222; font-size: 25px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'><p><b>" + BCards[i].title + "</b></p><span style='font-size:20px'>" + BCards[i].description + "</span></div>");
+          var someheadertextcolor = "#222222";
+          if (BCards[i].extras.headertextcolor != null)
+          {
+            someheadertextcolor = BCards[i].extras.headertextcolor;
+          }
+          $("#collapsible_banner").append("<img src='" + BCards[i].imageUrl +"' style='width:100%;height:auto'><div style='color:" + someheadertextcolor + "; font-size: 25px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'><p><b>" + BCards[i].title + "</b></p><span style='font-size:20px'>" + BCards[i].description + "</span></div>");
           if (BCards[i].linkText != "") {
             $("#collapsible_banner").append("<div style='position:absolute;bottom:100px;right:100px'><a id='collapsible_banner_link' href='" + BCards[i].url + "' style='font-size:17px;;border:none; border-radius:5px;display:inline-block;padding:10px 28px;vertical-align:middle;overflow:hidden;text-align:center;cursor:pointer;white-space:nowrap;user-select:none;background-color:#04AA6D;color:#ffffff;'>" + BCards[i].linkText + "</a></div>");
           }          
