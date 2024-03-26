@@ -35,10 +35,7 @@
       baseUrl: localStorage.baseUrl,
       enableLogging: true,
       allowUserSuppliedJavascript: true,
-      minimumIntervalBetweenTriggerActionsInSeconds: 5,
-      //appVersion: development,
-      //appVersionNumber: 1.2.3.4,
-      //safariWebsitePushId: web.com.appboy-web-demo.appboy,
+      minimumIntervalBetweenTriggerActionsInSeconds: 0,
       openCardsInNewTab: false,
       openInAppMessagesInNewTab: false,
       requireExplicitInAppMessageDismissal: false,
@@ -52,21 +49,6 @@
 
     braze.automaticallyShowInAppMessages();
     braze.subscribeToInAppMessage(function(inAppMessage) {
-
-      // check if message is not a control variant
-      if (!(inAppMessage.isControl)) {
-        // access the key-value pairs, defined as `extras`
-        const keyValuePairs = inAppMessage.extras || {};
-        // check the value of our key `msg-id` defined in the Braze dashboard
-        if (keyValuePairs["msg_id"] === "card") {
-          // We don't want to display the push prompt to users on browsers
-          // do not call `showInAppMessage`
-          $("#tile1").empty();
-          $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
-          return;
-        }
-      }
-
       // show the in-app message now
       braze.showInAppMessage(inAppMessage);
     });
