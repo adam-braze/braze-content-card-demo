@@ -47,28 +47,7 @@
       noCookies: false
     });
 
-    // optionally show all in-app messages without custom handling
-
     braze.automaticallyShowInAppMessages();
-    braze.subscribeToInAppMessage(function(inAppMessage) {
-
-      // check if message is not a control variant
-      if (!(inAppMessage.isControl)) {
-        // access the key-value pairs, defined as `extras`
-        const keyValuePairs = inAppMessage.extras || {};
-        // check the value of our key `msg-id` defined in the Braze dashboard
-        if (keyValuePairs["msg_id"] === "card") {
-          // We don't want to display the push prompt to users on browsers
-          // do not call `showInAppMessage`
-          $("#tile1").empty();
-          $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
-          return;
-        }
-      }
-
-      // show the in-app message now
-      braze.showInAppMessage(inAppMessage);
-    });
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
