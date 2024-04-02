@@ -23,11 +23,6 @@
     }(window, document, 'script');
 
     let BCards;
-
-    //if (localStorage.getItem("baseUrl") === null) {
-    //  localStorage.setItem("baseUrl","https://sondheim.braze.com");
-    //  localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
-    //}
     
     // initialize the SDK
     braze.initialize(localStorage.api_key, {
@@ -35,19 +30,34 @@
       enableLogging: true,
       allowUserSuppliedJavascript: true,
       minimumIntervalBetweenTriggerActionsInSeconds: 5,
-      //appVersion: development,
-      //appVersionNumber: 1.2.3.4,
-      //safariWebsitePushId: web.com.appboy-web-demo.appboy,
       openCardsInNewTab: false,
       openInAppMessagesInNewTab: false,
       requireExplicitInAppMessageDismissal: false,
-      minimumIntervalBetweenTriggerActionsInSeconds: 0,
       sessionTimeoutInSeconds: 1800,
       enableSdkAuthentication: true,
       noCookies: false
     });
 
-    braze.automaticallyShowInAppMessages();
+    //braze.automaticallyShowInAppMessages();
+
+    braze.subscribeToInAppMessage(function(inAppMessage) {
+    // control group messages should always be "shown"
+    // this will log an impression and not show a visible message
+    if (inAppMessage instanceof braze.ControlMessage) {
+      return braze.showInAppMessage(inAppMessage);
+    }
+  
+  
+    if (inAppMessage instanceof braze.InAppMessage) {
+      const extras = inAppMessage.extras;
+      if (extras) {
+        for (const key in extras) {
+          console.log("key: " + key + ", value: " + extras[key]);
+        }
+      }
+    }
+    braze.showInAppMessage(inAppMessage);
+  });
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
