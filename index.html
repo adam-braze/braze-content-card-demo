@@ -45,19 +45,32 @@
     // this will log an impression and not show a visible message
     if (inAppMessage instanceof braze.ControlMessage) {
       return braze.showInAppMessage(inAppMessage);
+      console.log("Control Group IAM");
     }
-  
   
     if (inAppMessage instanceof braze.InAppMessage) {
       const extras = inAppMessage.extras;
-      if (extras) {
-        for (const key in extras) {
-          console.log("key: " + key + ", value: " + extras[key]);
+      if (extras && extras.user_type) {
+        if (extras.user_type === 'standard') {
+          console.log("User type is standard");
+          // Do something specific for standard users
+          braze.showInAppMessage(inAppMessage);
+        } else if (extras.user_type === 'premium') {
+          console.log("User type is premium");
+          // Do something specific for premium users
+          braze.showInAppMessage(inAppMessage);
+        } else {
+          console.log("User type is not standard or premium");
+          // Do something for other user types
         }
+      } else {
+        console.log("No user type information found");
+        // Do something when there is no user type information
       }
     }
-    braze.showInAppMessage(inAppMessage);
-  });
+  
+    });
+
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
