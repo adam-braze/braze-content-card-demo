@@ -53,10 +53,12 @@
       if (extras && extras.user_type) {
         if (extras.user_type === 'standard') {
           console.log("User type is standard");
+          braze.showInAppMessage(inAppMessage);
           // Do something specific for standard users
           braze.showInAppMessage(inAppMessage);
         } else if (extras.user_type === 'premium') {
           console.log("User type is premium");
+          braze.showInAppMessage(inAppMessage);
           // Do something specific for premium users
           braze.showInAppMessage(inAppMessage);
         } else {
