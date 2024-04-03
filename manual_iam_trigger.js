@@ -52,7 +52,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
             if (extras.user_type === 'standard' & isStandard = true) {
                 console.log("User type is standard");
                 braze.showInAppMessage(inAppMessage);
-            } else if (extras.user_type === 'premium'& isPremium = true) {
+            } else if (extras.user_type === 'premium' & isPremium = true) {
                 console.log("User type is premium");
                 braze.showInAppMessage(inAppMessage);
             } else {
