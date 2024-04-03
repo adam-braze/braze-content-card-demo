@@ -52,6 +52,14 @@ function login() {
   console.log("Customer logged in successfully.");
 }
 
+// Function to simulate customer logout, resetting all flags to false
+function logout() {
+  isLoggedIn = false;
+  isPremium = false;
+  isStandard = false;
+  console.log("Customer logged out successfully - All Flags set to False");
+}
+
 // Function to set premium status
 function setPremium() {
   isPremium = true;
