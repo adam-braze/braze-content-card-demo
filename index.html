@@ -88,17 +88,19 @@ function checkFlags() {
 braze.subscribeToInAppMessage(function(inAppMessage) {
 // control group messages should always be "shown" - this will log an impression and not show a visible message
     if (inAppMessage instanceof braze.ControlMessage) {
-        return braze.showInAppMessage(inAppMessage);
-        console.log("Control Group IAM");
+      // This comment is before the return statement
+      console.log("Control Group IAM");
+      return braze.showInAppMessage(inAppMessage);
     }
+
   
     if (inAppMessage instanceof braze.InAppMessage) {
         const extras = inAppMessage.extras;
         if (extras && extras.user_type) {
-            if (extras.user_type === 'standard' & isStandard = true) {
+          if (extras.user_type === 'standard' && isStandard === true) {
                 console.log("User type is standard");
                 braze.showInAppMessage(inAppMessage);
-            } else if (extras.user_type === 'premium' & isPremium = true) {
+          } else if (extras.user_type === 'premium' && isPremium === true) {
                 console.log("User type is premium");
                 braze.showInAppMessage(inAppMessage);
             } else {
