@@ -38,3 +38,28 @@ function checkFlags() {
     console.log("Customer is not logged in.");
   }
 }
+
+braze.subscribeToInAppMessage(function(inAppMessage) {
+// control group messages should always be "shown" - this will log an impression and not show a visible message
+    if (inAppMessage instanceof braze.ControlMessage) {
+        return braze.showInAppMessage(inAppMessage);
+        console.log("Control Group IAM");
+    }
+  
+    if (inAppMessage instanceof braze.InAppMessage) {
+        const extras = inAppMessage.extras;
+        if (extras && extras.user_type) {
+            if (extras.user_type === 'standard' & isStandard = true) {
+                console.log("User type is standard");
+                braze.showInAppMessage(inAppMessage);
+            } else if (extras.user_type === 'premium'& isPremium = true) {
+                console.log("User type is premium");
+                braze.showInAppMessage(inAppMessage);
+            } else {
+                console.log("User type is not standard or premium");
+            }
+        } else {
+            console.log("No user type information found");
+        }
+    }
+});
