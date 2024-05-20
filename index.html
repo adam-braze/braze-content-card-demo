@@ -139,11 +139,19 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
      
       
       for (let i = 0; i < BCards.length; i++) {
-        if (BCards[i].extras.location == "hero") {
-          //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
-          $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
-          //$("#navigation").append("style='display=block';");
-          render = true;
+        const featureFlag = braze.getFeatureFlag("hero_banner_ff");
+        braze.logFeatureFlagImpression("hero_banner_ff");
+        if (featureFlag?.enabled) {
+          // use  feature
+          if (BCards[i].extras.location == "hero") {
+            //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
+            $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
+            //$("#navigation").append("style='display=block';");
+            render = true;
+          }
+        } else {
+          // use old feature
+          console.log("No Hero for you!");
         }
         if (BCards[i].extras.location=="tile_1") {
           if (BCards[i].extras.type=="asset") {
