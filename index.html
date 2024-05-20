@@ -139,19 +139,11 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
      
       
       for (let i = 0; i < BCards.length; i++) {
-        const featureFlag = braze.getFeatureFlag("hero_banner_ff");
-        braze.logFeatureFlagImpression("hero_banner_ff");
-        if (featureFlag?.enabled) {
-          // use  feature
-          if (BCards[i].extras.location == "hero") {
-            //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
-            $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
-            //$("#navigation").append("style='display=block';");
-            render = true;
-          }
-        } else {
-          // use old feature
-          console.log("No Hero for you!");
+        if (BCards[i].extras.location == "hero") {
+          //$("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info'><a href='" + BCards[i].url + "'>" + BCards[i].title + "</a></div> </div>");
+          $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
+          //$("#navigation").append("style='display=block';");
+          render = true;
         }
         if (BCards[i].extras.location=="tile_1") {
           if (BCards[i].extras.type=="asset") {
@@ -238,14 +230,23 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           //$("#ob_tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "''></a>");
           $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
         }
+      }
+
+      const featureFlag = braze.getFeatureFlag("hero_banner_ff");
+      braze.logFeatureFlagImpression("hero_banner_ff");
+      if (featureFlag?.enabled) {
+        // use new feature
+        for (let i = 0; i < BCards.length; i++) {
         if (BCards[i].extras.location =='brand') {
           $("#brand").empty();
           $("#brand").append(BCards[i].extras.brand);
         }
       }
-
+      } else {
+        // use old feature
+        $("#brand").append("I don't like personalisation");
+      }
       
-
       if (render == false) {
         //console.log("No personalised content card ", render);
         $("#board").append("<div id='navigation' style='display:none;'><a class='Back' onclick='minusSlides(1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a></div>")
