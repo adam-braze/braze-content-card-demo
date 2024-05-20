@@ -154,21 +154,21 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
             $("#tile1").append("<div style='text-align: center;'><p>" + BCards[i].title + "</p></div>");
           }
           else {
-          $("#recommendation_header").empty();
-          $("#recommendation_header").append("<p><h3>&nbsp;&nbsp;" + BCards[i].extras.groupheader + "</h3></p>");
-          $("#tile1").empty();
-          $("#tile1").append("<p>&nbsp;</p>");
-          $("#tile1").append("<div style='width: 280px;'>");
-          $("#tile1").append("<label>");
-          $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
-          $("#tile1").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
-          $("#tile1").append("<h3>" + BCards[i].title + "</h3>");
-          $("#tile1").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
-          $("#tile1").append("<div style='color:grey; padding-block: 4px; text-align: right;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
-          $("#tile1").append("</div></div>");
-          //braze.logContentCardImpressions(BCards[i]);
+            $("#recommendation_header").empty();
+            $("#recommendation_header").append("<p><h3>&nbsp;&nbsp;" + BCards[i].extras.groupheader + "</h3></p>");
+            $("#tile1").empty();
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<div style='width: 280px;'>");
+            $("#tile1").append("<label>");
+            $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile1").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></label>");
+            $("#tile1").append("<h3>" + BCards[i].title + "</h3>");
+            $("#tile1").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
+            $("#tile1").append("<div style='color:grey; padding-block: 4px; text-align: right;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
+            $("#tile1").append("</div></div>");
+            //braze.logContentCardImpressions(BCards[i]);
+          }
         }
-      }
         if (BCards[i].extras.location=="tile_2") {
           $("#tile2").empty();
           $("#tile2").append("<p>&nbsp;</p>");
@@ -230,7 +230,10 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           //$("#ob_tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "''></a>");
           $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
         }
-
+        if (BCards[i].extras.location =='brand') {
+          $("#brand").empty();
+          $("#brand").append(BCards[i].extras.brand);
+        }
       }
 
       
@@ -263,9 +266,13 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
 
     <!-- Jumbotron -->
     <div class="jumbotron">
-      <b>Brand</b>
+      <b id="brand">Brand</b>
       <div style="float:right;min-width: 20%;">
-        <button id="btn_refresh" title="requestContentCardsRefresh">&nbsp;🔄</button><button id="btn_show" title="showContentCards">&nbsp;👀</button>&nbsp;<div style="float:right;color: grey;" id="usertag"></div></div>
+        <button id="btn_refresh" title="requestContentCardsRefresh">&nbsp;🔄</button>
+        <button id="btn_show" title="showContentCards">&nbsp;👀</button>
+        &nbsp;
+        <div style="float:right;color: grey;" id="usertag"></div>
+      </div>
     </div>
     <!-- End -- Jumbotron -->
     <!-- Tabs -->
