@@ -243,6 +243,8 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
         }
       }
       } else {
+        $("#brand").empty();
+        $("#brand").append(BCards[i].extras.brand);
         $("#board").empty();
       }
       
