@@ -230,19 +230,19 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           //$("#ob_tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "''></a>");
           $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
         }
+        if (BCards[i].extras.location =='brand') {
+          $("#brand").empty();
+          $("#brand").append(BCards[i].extras.brand);
+        }
       }
 
       const featureFlag = braze.getFeatureFlag("hero_banner_ff");
       braze.logFeatureFlagImpression("hero_banner_ff");
       if (featureFlag?.enabled) {
         // use new feature
-        for (let i = 0; i < BCards.length; i++) {
-        if (BCards[i].extras.location =='brand') {
-          $("#brand").empty();
-          $("#brand").append(BCards[i].extras.brand);
-        }
+        console.log("Feature Flag Enabled");
       }
-      } else {
+       else {
         $("#board").empty();
       }
       
