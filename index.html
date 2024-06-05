@@ -61,6 +61,7 @@
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
       // cards have been updated
+      console.log("Braze - subscribeToContentCardsUpdates: ", updates.cards);
       render_the_cards(updates.cards);
 
     });
@@ -162,8 +163,6 @@
       <div class="row">
         <div id="recommendation_header" ></div>
         <div id="tile1" class="col-sm-4" style="height:300px; background-color: #eeeeee;">
-          <!--<h3>Tile 1</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
           <p>&nbsp;</p>
           <label>
             <input type="radio" name="template-pick" value="3e4634f6-f9f5-4c14-36b8-de973596e7f5" checked="">
@@ -171,8 +170,6 @@
           </label>
         </div>
         <div id="tile2" class="col-sm-4" style="height:300px; background-color: #eeeeee;">
-          <!--<h3>Tile 2</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
           <p>&nbsp;</p>
           <label>
             <input type="radio" name="template-pick" value="3e4634f6-f9f5-4c14-36b8-de973596e7f5" checked="">
@@ -180,8 +177,6 @@
           </label>
         </div>
         <div id="tile3" class="col-sm-4" style="height:300px; background-color: #eeeeee;">
-          <!--<h3>Tile 3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>-->
           <p>&nbsp; </p>
           <label>
             <input class="img-fluid col-sm-4" type="radio" name="template-pick"
@@ -208,7 +203,7 @@
         BCards = contentcard_objs;
         let render = false;
         //do something with the latest instance of 'cards'
-        console.log("Braze - subscribeToContentCardsUpdates: ", contentcard_objs);
+        
         //This will be invoked every time the feed is successfully refreshed following a requestContentCardsRefresh() request
         //Here you can render the cards to the UI as well as logging impressions and clicks. You can check if the card is a Control here. 
         $("#board").empty();
@@ -244,6 +239,12 @@
             var viewedcards = [latest_tile1];
             braze.logContentCardImpressions(viewedcards);
           }
+        } else {
+            $("#tile1").empty();
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<label>");
+            $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile1").append("<img class='img-fluid' src='./rs/tile1_494_563.png'></label>");
         }
 
         let latest_tile2 = contentcard_objs.filter(obj=> obj.extras.location==='tile_2' && obj.extras.type === 'recommendation')
@@ -263,6 +264,12 @@
           $("#tile2").append("</div></div>");
           var viewedcards = [latest_tile2];
           braze.logContentCardImpressions(viewedcards);
+        } else {
+            $("#tile2").empty();
+            $("#tile2").append("<p>&nbsp;</p>");
+            $("#tile2").append("<label>");
+            $("#tile2").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile2").append("<img class='img-fluid' src='./rs/tile1_494_563.png'></label>");
         }
 
         let latest_tile3 = contentcard_objs.filter(obj=> obj.extras.location==='tile_3' && obj.extras.type === 'recommendation')
@@ -282,6 +289,12 @@
           $("#tile3").append("</div></div>");
           var viewedcards = [latest_tile3];
           braze.logContentCardImpressions(viewedcards);
+        } else {
+            $("#tile3").empty();
+            $("#tile3").append("<p>&nbsp;</p>");
+            $("#tile3").append("<label>");
+            $("#tile3").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile3").append("<img class='img-fluid' src='./rs/tile1_494_563.png' alt='(location:tile_3, image ratio: 494x563)'></label>");
         }
 
 
@@ -398,6 +411,7 @@
         console.log('The user is ' + braze.getUser().getUserId());
         $("#usertag").html("userId: " + braze.getUser().getUserId());
         render_the_cards(braze.getCachedContentCards().cards);
+        console.log("Braze - getCachedContentCards: ", braze.getCachedContentCards().cards);
       }
   </script>
   <script>
