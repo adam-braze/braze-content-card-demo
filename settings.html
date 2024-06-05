@@ -184,10 +184,8 @@
         userID = document.getElementById('userid').value;
         braze.changeUser(userID);
 
-        braze.getUser().getUserId(function(userId) {
-          console.log('The user is ' + userId);
-          $("#usertag").html("userId: " + userId);
-        });
+        console.log('The user is ' + braze.getUser().getUserId());
+        $("#usertag").html("userId: " + braze.getUser().getUserId());
       }
     
       window.onload = function () {
