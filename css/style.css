@@ -32,6 +32,12 @@
   color: green;
 }
 
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 .island {
   padding: 1rem;
   margin: 12px;
