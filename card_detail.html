@@ -1,0 +1,252 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Front-End</title>
+  <link rel="shortcut icon" type="image/jpg"
+    href="https://braze-front-end.s3.amazonaws.com/Braze-Logo-Monogram-White-3x.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/font-awesome.css">
+
+  <link rel="stylesheet" href="./css/style.css">
+
+  <script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
+  <link href="./css/main.css" rel="stylesheet" />
+
+  <script type="text/javascript">
+    +function(a,p,P,b,y){a.braze={};a.brazeQueue=[];for(var s="BrazeSdkMetadata DeviceProperties Card Card.prototype.dismissCard Card.prototype.removeAllSubscriptions Card.prototype.removeSubscription Card.prototype.subscribeToClickedEvent Card.prototype.subscribeToDismissedEvent Card.fromContentCardsJson ImageOnly CaptionedImage ClassicCard ControlCard ContentCards ContentCards.prototype.getUnviewedCardCount Feed Feed.prototype.getUnreadCardCount ControlMessage InAppMessage InAppMessage.SlideFrom InAppMessage.ClickAction InAppMessage.DismissType InAppMessage.OpenTarget InAppMessage.ImageStyle InAppMessage.Orientation InAppMessage.TextAlignment InAppMessage.CropType InAppMessage.prototype.closeMessage InAppMessage.prototype.removeAllSubscriptions InAppMessage.prototype.removeSubscription InAppMessage.prototype.subscribeToClickedEvent InAppMessage.prototype.subscribeToDismissedEvent InAppMessage.fromJson FullScreenMessage ModalMessage HtmlMessage SlideUpMessage User User.Genders User.NotificationSubscriptionTypes User.prototype.addAlias User.prototype.addToCustomAttributeArray User.prototype.addToSubscriptionGroup User.prototype.getUserId User.prototype.getUserId User.prototype.incrementCustomUserAttribute User.prototype.removeFromCustomAttributeArray User.prototype.removeFromSubscriptionGroup User.prototype.setCountry User.prototype.setCustomLocationAttribute User.prototype.setCustomUserAttribute User.prototype.setDateOfBirth User.prototype.setEmail User.prototype.setEmailNotificationSubscriptionType User.prototype.setFirstName User.prototype.setGender User.prototype.setHomeCity User.prototype.setLanguage User.prototype.setLastKnownLocation User.prototype.setLastName User.prototype.setPhoneNumber User.prototype.setPushNotificationSubscriptionType InAppMessageButton InAppMessageButton.prototype.removeAllSubscriptions InAppMessageButton.prototype.removeSubscription InAppMessageButton.prototype.subscribeToClickedEvent FeatureFlag FeatureFlag.prototype.getStringProperty FeatureFlag.prototype.getNumberProperty FeatureFlag.prototype.getBooleanProperty FeatureFlag.prototype.getImageProperty FeatureFlag.prototype.getJsonProperty FeatureFlag.prototype.getTimestampProperty automaticallyShowInAppMessages destroyFeed hideContentCards showContentCards showFeed showInAppMessage deferInAppMessage toggleContentCards toggleFeed changeUser destroy getDeviceId getDeviceId initialize isPushBlocked isPushPermissionGranted isPushSupported logCardClick logCardDismissal logCardImpressions logContentCardImpressions logContentCardClick logCustomEvent logFeedDisplayed logInAppMessageButtonClick logInAppMessageClick logInAppMessageHtmlClick logInAppMessageImpression logPurchase openSession requestPushPermission removeAllSubscriptions removeSubscription requestContentCardsRefresh requestFeedRefresh refreshFeatureFlags requestImmediateDataFlush enableSDK isDisabled setLogger setSdkAuthenticationSignature addSdkMetadata disableSDK subscribeToContentCardsUpdates subscribeToFeedUpdates subscribeToInAppMessage subscribeToSdkAuthenticationFailures toggleLogging unregisterPush wipeData handleBrazeAction subscribeToFeatureFlagsUpdates getAllFeatureFlags logFeatureFlagImpression".split(" "),i=0;i<s.length;i++){for(var m=s[i],k=a.braze,l=m.split("."),j=0;j<l.length-1;j++)k=k[l[j]];k[l[j]]=(new Function("return function "+m.replace(/\./g,"_")+"(){window.brazeQueue.push(arguments); return true}"))()}window.braze.getDeferredInAppMessage=function(){return new window.braze.InAppMessage};window.braze.getCachedContentCards=function(){return new window.braze.ContentCards};window.braze.getCachedFeed=function(){return new window.braze.Feed};window.braze.getUser=function(){return new window.braze.User};window.braze.getFeatureFlag=function(){return new window.braze.FeatureFlag};(y=p.createElement(P)).type='text/javascript';
+      y.src='https://js.appboycdn.com/web-sdk/5.3/braze.min.js';
+      y.async=1;(b=p.getElementsByTagName(P)[0]).parentNode.insertBefore(y,b)
+    }(window,document,'script');
+
+    let BCards;
+
+    if (localStorage.getItem("baseUrl") === null) {
+      localStorage.setItem("baseUrl","https://sondheim.braze.com");
+      localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
+    } 
+    // initialize the SDK
+    braze.initialize(localStorage.api_key, {
+      baseUrl: localStorage.baseUrl,
+      enableLogging: true,
+      allowUserSuppliedJavascript: true,
+      minimumIntervalBetweenTriggerActionsInSeconds: 5
+    });
+
+    // optionally show all in-app messages without custom handling
+
+    braze.automaticallyShowInAppMessages();
+    // braze.subscribeToInAppMessage(function(inAppMessage) {
+
+    //   // check if message is not a control variant
+    //   if (!(inAppMessage.isControl)) {
+    //     // access the key-value pairs, defined as `extras`
+    //     const keyValuePairs = inAppMessage.extras || {};
+    //     // check the value of our key `msg-id` defined in the Braze dashboard
+    //     if (keyValuePairs["msg_id"] === "card") {
+    //       // We don't want to display the push prompt to users on browsers
+    //       // do not call `showInAppMessage`
+    //       $("#tile1").empty();
+    //       $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
+    //       return;
+    //     }
+    //   }
+
+      // show the in-app message now
+    //  braze.showInAppMessage(inAppMessage);
+    //});
+
+    // if you use Content Cards
+    braze.subscribeToContentCardsUpdates(function (updates) {
+      // cards have been updated
+      console.log("Braze - subscribeToContentCardsUpdates: ", updates.cards);
+      render_the_cards(updates.cards);
+
+    });
+
+    // Be sure to call `openSession` after `automaticallyShowInAppMessages`
+    braze.openSession();
+    
+
+  </script>
+</head>
+
+<body>
+
+  <div id="Tab" class="container">
+
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+      <b>Brand</b>
+      <div style="float:right;min-width: 20%;">
+        <button id="btn_refresh" title="requestContentCardsRefresh">&nbsp;</button><button id="btn_show" title="showContentCards">&nbsp;</button>&nbsp;<div style="float:right;color: grey;" id="usertag"></div></div>
+    </div>
+    <!-- End -- Jumbotron -->
+    <!-- Tabs -->
+    <div class="col-lg-12">
+      <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill"
+            href="index.html">Home</a></li>
+        <li class=""><a data-toggle="pill" href="navigation.html">Navigation</a></li>
+        <li class=""><a data-toggle="pill" href="news.html">News</a></li>
+        <li class=""><a data-toggle="pill" href="settings.html">Settings</a></li>
+      </ul>
+      
+    </div>
+    <!-- End -- Tabs -->
+
+    <div class="tab-content">
+      <div class="tab-pane fade active in" id="email">
+        <p>&nbsp;</p>
+      </div>
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <!-- End -- Spacer -->
+      
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <div class="col-xs-12" style="height:10px;"></div>
+      <div class="col-xs-12" style="height:10px;"></div>
+
+      <!-- 3-column -->
+      <div class="row" style="margin:auto; width:50%; padding:10px">
+        <div id="recommendation_header" ></div>
+        <div id="tile1" class="col-sm-4" style="min-height:300px; min-width:500px; text-align:center; background-color: #eeeeee;">
+          <!-- <p>&nbsp;</p>
+          <label>
+            <input type="radio" name="template-pick" value="3e4634f6-f9f5-4c14-36b8-de973596e7f5" checked="">
+            <img class="img-fluid" src="./rs/tile1_494_563.png">
+          </label> -->
+          
+          <p>&nbsp;</p>
+          <div class="clearfix" style="padding:20px;">
+            <img style="float:left;" src="./rs/tile1_494_563.png" width="100" height="100">
+            <h3>Get 15% of your order!</h3>
+            Simply spend $100 or more in one single transaction. For online order only.
+          </div>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p> 
+          <input type="radio" name="template-pick" value="de586dc2-e71a-4aac-948b-6553a7285c4d">
+          <div style='text-align: center;'>
+            <!-- insert your custom barcode setting your data in the GET parameter "data" -->
+            <img alt='Barcode Generator TEC-IT'
+                 src='https://barcode.tec-it.com/barcode.ashx?data=ABC-abc-1234&code=Code128&translate-esc=on'/>
+          </div>
+          <div style='padding-top:8px; text-align:center; font-size:15px; font-family: Source Sans Pro, Arial, sans-serif;'>
+            <!-- back-linking to www.tec-it.com is required -->
+            <a href='https://www.tec-it.com' title='Barcode Software by TEC-IT' target='_blank'>TEC-IT Barcode Generator<br/></a>
+          </div>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          
+          <div style="padding-block: 4px; ">Offer expires : &nbsp;&nbsp;</div>
+          View terms & conditions  
+          <p>&nbsp;</p>
+        </div> 
+
+      </div>
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:10px;"></div>
+      <!-- End -- Spacer -->
+      <!-- Spacer -->
+      <div class="col-xs-12" style="height:50px;"></div>
+      <!-- End -- Spacer -->
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+          function GetURLParameter(sParam)
+      {
+          var sPageURL = window.location.search.substring(1);
+          var sURLVariables = sPageURL.split('&');
+          for (var i = 0; i < sURLVariables.length; i++) 
+          {
+              var sParameterName = sURLVariables[i].split('=');
+              if (sParameterName[0] == sParam) 
+              {
+                  return sParameterName[1];
+              }
+          }
+      }
+      function render_the_cards(contentcard_objs) {
+        BCards = contentcard_objs;
+        let render = false;
+        //do something with the latest instance of 'cards'
+        var card_id = GetURLParameter("card_id");  
+        if (card_id.length = 0) {
+          return; 
+        }
+        let latest_tile1 = contentcard_objs.filter(obj=> obj.extras.card_id === card_id)
+          .reduce((a,b)=> (a.updated > b.updated ? a : b), {});
+        
+        if (Object.keys(latest_tile1).length > 0) {
+          //render tile1
+          if (latest_tile1.extras.type=="asset") {
+            $("#tile1").empty();
+            $("#tile1").append("<br>");
+            $("#tile1").append("<label><input class='img-fluid col-sm-4' type='radio' name='template-pick' value='9b74cac7-8946-46c4-95af-607444920bdd'>");
+            $("#tile1").append("<a href='" + latest_tile1.url + "'><img class='img-fluid' src='" + latest_tile1.imageUrl + "'></a></label>");
+            $("#tile1").append("<div style='text-align: center;'><p>" + latest_tile1.title + "</p></div>");
+          }
+          else {
+            $("#recommendation_header").empty();
+            $("#recommendation_header").append("<p><h3>&nbsp;&nbsp;" + latest_tile1.extras.groupheader + "</h3></p>");
+            $("#tile1").empty();
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<div class='clearfix' style='padding: 20px;'><img style='float:left;' width='100' height='100'  src='" + latest_tile1.imageUrl + "'><h3>" + latest_tile1.title + "</h3>" + latest_tile1.extras.reward_desc + "</div>");
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile1").append("<div style='text-align: center;'><img src='https://barcode.tec-it.com/barcode.ashx?data=" + latest_tile1.extras.reward_id + "&code=Code128&translate-esc=on'></div>");
+            $("#tile1").append("<div style='padding-top:8px; text-align:center; font-size:15px; font-family: Source Sans Pro, Arial, sans-serif;'><a href='https://www.tec-it.com' title='Barcode Software by TEC-IT' target='_blank'>TEC-IT Barcode Generator<br/></a></div>");
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<div style='padding-block: 4px;'>Offer expires: " + latest_tile1.expiresAt + "&nbsp;&nbsp;</div>");
+            $("#tile1").append("View terms & conditions");
+            $("#tile1").append("<p>&nbsp;</p>");
+            // $("#tile1").append("</div></div>");
+            var viewedcards = [latest_tile1];
+            braze.logContentCardImpressions(viewedcards);
+          }
+        } else {
+            $("#tile1").empty();
+            $("#tile1").append("<p>&nbsp;</p>");
+            $("#tile1").append("<label>");
+            $("#tile1").append("<input type='radio' name='template-pick' value='de586dc2-e71a-4aac-948b-6553a7285c4d'>");
+            $("#tile1").append("<img class='img-fluid' src='./rs/tile1_494_563.png'></label>");
+        }
+      }
+
+
+      window.onload = function () {
+        console.log('The user is ' + braze.getUser().getUserId());
+        $("#usertag").html("userId: " + braze.getUser().getUserId());
+        render_the_cards(braze.getCachedContentCards().cards);
+        console.log("Braze - getCachedContentCards: ", braze.getCachedContentCards().cards);
+      }
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#btn_refresh").click(function () {
+        braze.requestContentCardsRefresh();
+        
+        console.log('The user is ' + braze.getUser().getUserId());
+        $("#usertag").html("userId: " + braze.getUser().getUserId());
+        
+      });
+      $("#btn_show").click(function () {
+        braze.toggleContentCards();
+      });
+    }); 
+    </script>
+
+
+</body>
+
+</html>
