@@ -265,6 +265,12 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
     braze.openSession();
     braze.requestContentCardsRefresh();
 
+    function showBrazeMessage() {
+        var message = new braze.SlideUpMessage("Welcome to Braze! This is an in-app message.");
+        message.slideFrom = braze.InAppMessage.SlideFrom.TOP;
+        braze.showInAppMessage(message);
+      }
+
   </script>
 </head>
 
@@ -289,7 +295,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
         <li class="active"><a data-toggle="pill"
             href="index.html">Home</a></li>
         <li class=""><a data-toggle="pill" href="navigation.html">Navigation</a></li>
-        <li class=""><a data-toggle="pill" href="news.html">News</a></li>
+        <li class=""><a data-toggle="pill" href="news.html" onclick="showBrazeMessage()">News</a></li>
         <li class=""><a data-toggle="pill" href="settings.html">Settings</a></li>
       </ul>
       
