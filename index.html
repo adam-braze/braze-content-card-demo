@@ -236,15 +236,15 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
         }
       }
 
-      //const featureFlag = braze.getFeatureFlag("hero_banner_ff");
-      //braze.logFeatureFlagImpression("hero_banner_ff");
-      //if (featureFlag?.enabled) {
-      //  // use new feature
-      //  console.log("Feature Flag Enabled");
-      //}
-      // else {
-      //  $("#board").empty();
-      //}
+      const featureFlag = braze.getFeatureFlag("hero_banner_ff");
+      braze.logFeatureFlagImpression("hero_banner_ff");
+      if (featureFlag?.enabled) {
+        // use new feature
+        console.log("Feature Flag Enabled");
+      }
+       else {
+        $("#board").empty();
+      }
       
       if (render == false) {
         //console.log("No personalised content card ", render);
