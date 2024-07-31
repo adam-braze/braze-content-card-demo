@@ -304,6 +304,8 @@
           if (BCards[i].extras.location == "hero") {
             $("#board").append("<div class='Containers'> <div class='MessageInfo'>Location: " + BCards[i].extras.location + "</div><img src='" + BCards[i].imageUrl + "' style='width:100%'><div class='Info_white'>" + BCards[i].title + "</div> </div>");
             render = true;
+            let viewedcards = new Array(BCards[i]);
+            braze.logContentCardImpressions(viewedcards);
           }
   
           if (BCards[i].extras.location == "collapsible_banner") {
