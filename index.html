@@ -240,10 +240,11 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
       braze.logFeatureFlagImpression("hero_banner_ff");
       if (featureFlag?.enabled) {
         // use new feature
-        console.log("Feature Flag Enabled");
+        console.log("hero_banner_ff Feature Flag Enabled - Removing Hero Banner");
+        $("#board").empty();
       }
        else {
-        $("#board").empty();
+        console.log("hero_banner_ff Feature Flag Not Found - Keeping Hero Banner");
       }
       
       if (render == false) {
