@@ -24,10 +24,6 @@
 
     let BCards;
 
-    if (localStorage.getItem("baseUrl") === null) {
-      localStorage.setItem("baseUrl","https://sondheim.braze.com");
-      localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
-    } 
     // initialize the SDK
     braze.initialize(localStorage.api_key, {
       baseUrl: localStorage.baseUrl,
@@ -67,7 +63,7 @@
             href="index.html">Home</a></li>
         <li class=""><a data-toggle="pill" href="navigation.html">Navigation</a></li>
         <li class="active"><a data-toggle="pill" href="news.html">News</a></li>
-        <li class=""><a data-toggle="pill" href="settings.html">Settings</a></li>
+        <li class=""><a data-toggle="pill" href="settings.html"><div id="indicator">Settings</div></a></li>
       </ul>
       
     </div>
@@ -120,6 +116,10 @@
       $("#btn_show").click(function () {
         braze.toggleContentCards();
       });
+      
+      if (localStorage.getItem("baseUrl") === null) {
+        $("#indicator").append("<img src='https://i.pinimg.com/originals/b1/e1/0b/b1e10b0e4e26bf904a565172e79992ae.png' style='height:15px;width:15px;'>");
+      } 
     }); 
 
     window.onload = function () {

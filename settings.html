@@ -24,10 +24,10 @@
 
     let BCards;
 
-    if (localStorage.getItem("baseUrl") === null) {
-      localStorage.setItem("baseUrl","https://sondheim.braze.com");
-      localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
-    } 
+    // if (localStorage.getItem("baseUrl") === null) {
+    //   localStorage.setItem("baseUrl","https://sondheim.braze.com");
+    //   localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
+    // } 
     // initialize the SDK
     braze.initialize(localStorage.api_key, {
       baseUrl: localStorage.baseUrl,
@@ -80,27 +80,41 @@
       <!-- Spacer -->
       <div class="col-xs-12" style="height:10px;"></div>
       <!-- End -- Spacer -->
+    
+    <div id="configuration" style="display:none;">
+      <field class='field' style="width: 50%">
+          <label for="i0" class="label">SDK API Key:</label>
+          <input type="text" class="inputfield" id="api_key"/>
+          <label for="i0" class="label">SDK Endpoint:</label>
+          <input type="text" class="inputfield" id="baseUrl"/>
+      
+      <button role="button" type="button" class="btn btn--primary theme--dark" onclick="applyConfig();">Apply</button>
+      <button role="button" type="button" class="btn btn--primary theme--dark" onclick="resetConfig();">Clear</button>
+      </field>
+      <Br>
+    </div>
 
+    
       <!-- 1-column -->
+      
       <div class="row">
+        
         <!--<div class="col-lg-10">-->
         <!-- hero image carousel here-->
         <div id="board" class="slideshow-container">
           <div class="island">
-            <field class='field' style="width: 50%">
-                <label for="i0" class="label">SDK API Key:</label>
-                <input type="text" class="inputfield" id="api_key"/>
-            </field>
-            <field class='field' style="width: 50%">
-                <label for="i0" class="label">SDK Endpoint:</label>
-                <input type="text" class="inputfield" id="baseUrl"/>
-                <BR><br>
-                <button role="button" type="button" class="btn btn--primary theme--dark" onclick="applyConfig();">Apply Configuration</button>
-            </field>
-            <br><br>            
+            <label for="i0" class="label">SDK Initialized:</label>
+            <span tabindex="1" class="tag">
+                <div class="tag__key" id="api_key_tag"></div>
+            </span><a href="#" onclick="showEdit();"><img src="https://cdn-staging.braze.com/appboy/communication/assets/svg_assets/files/663cab1b0eb06d0d6d60be6e/original.svg?1715251995" style="height:15px;width:15px;"></a>
             <br>
-            <br>
+            <span tabindex="1" class="tag">
+              <div class="tag__key" id="baseUrl_tag"></div>
+            </span>
          </div>
+        </div>
+      </div>
+      <div class="row">
          <div class="island">
           <field class='field' style="width: 50%">
               <label for="i0" class="label">User Id:</label>
@@ -161,6 +175,23 @@
         location.reload();
     }
 
+    function resetConfig() {
+        localStorage.clear();
+        
+        console.log("localStorage is clear");
+        location.reload();
+    }
+    
+    function showEdit() {
+        var editSection = document.getElementById("configuration");
+        if (editSection.style.display == "block") {
+            editSection.style.display = "none";
+        }
+        else {
+            editSection.style.display = "block";
+        }
+    }
+
     function track() {
         let eventName = '';
         let jsonData = {};
@@ -203,10 +234,10 @@
       $("#btn_show").click(function () {
         braze.toggleContentCards();
       });
-    
-      $("#api_key").val(localStorage.getItem("api_key"));
-      $("#baseUrl").val(localStorage.getItem("baseUrl"));
-
+      
+      $("#api_key_tag").html(localStorage.getItem("api_key"));  
+      $("#baseUrl_tag").html(localStorage.getItem("baseUrl"));  
+        
     }); 
     
     
