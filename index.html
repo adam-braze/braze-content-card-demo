@@ -38,7 +38,7 @@
       noCookies: false
     });
 
-    //braze.automaticallyShowInAppMessages();
+    braze.automaticallyShowInAppMessages();
 
 // START OF PREMIUM / STANDARD USER LOGIN EXAMPLE   
 // Initialize flags
@@ -266,11 +266,11 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
     braze.openSession();
     braze.requestContentCardsRefresh();
 
-    function showBrazeMessage() {
-        var message = new braze.SlideUpMessage("Welcome to Braze! This is an in-app message.");
-        message.slideFrom = braze.InAppMessage.SlideFrom.TOP;
-        braze.showInAppMessage(message);
-      }
+    //function showBrazeMessage() {
+    //   var message = new braze.SlideUpMessage("Welcome to Braze! This is an in-app message.");
+    //    message.slideFrom = braze.InAppMessage.SlideFrom.TOP;
+    //    braze.showInAppMessage(message);
+    //  }
 
   </script>
 </head>
