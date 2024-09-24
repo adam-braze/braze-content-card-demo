@@ -112,8 +112,28 @@
       <!-- End -- Spacer -->
 
     </div>
-
-  </div>
+<!-- Google Calendar Appointment Scheduling begin -->
+<iframe src="https://calendar.google.com/calendar/appointments/AcZssZ3S9ZMRJZ5yeKVipwGVZl1A00YnmROg2zft28k=?gv=true" style="border: 0" width="100%" height="600" frameborder="0"></iframe>
+<!-- end Google Calendar Appointment Scheduling -->
+  
+<!-- Google Calendar Appointment Scheduling begin -->
+<link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+<script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+<script>
+(function() {
+  var target = document.currentScript;
+  window.addEventListener('load', function() {
+    calendar.schedulingButton.load({
+      url: 'https://calendar.google.com/calendar/appointments/AcZssZ3S9ZMRJZ5yeKVipwGVZl1A00YnmROg2zft28k=?gv=true',
+      color: '#8E24AA',
+      label: 'Book a Meeting!',
+      target,
+    });
+  });
+})();
+</script>
+<!-- end Google Calendar Appointment Scheduling -->
+</div>
 
   <script>
     $(document).ready(function () {
