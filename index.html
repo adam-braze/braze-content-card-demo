@@ -154,6 +154,28 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
 });
 
 
+braze.subscribeToBannersUpdates((banners) => {
+   
+   // get this placement's banner. If it's `null` the user did not qualify for one.
+   const globalBanner = braze.getBanner("cc_site_tile3");
+
+   // choose where in the DOM you want to insert the banner HTML
+   const container = document.getElementById("ob_tile3");
+
+   // Insert the banner which replacees the innerHTML of that container
+   braze.insertBanner(globalBanner, container);
+
+   // Special handling if the user is part of a Control Variant
+   if (globalBanner.isControl) {
+       // hide or collapse the container
+       container.style.display = 'none';
+   }
+});
+
+braze.requestBannersRefresh(["cc_site_tile3"]);
+
+
+
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
@@ -213,7 +235,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           $("#tile2").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
           $("#tile2").append("<div style='color:grey; padding-block: 4px; text-align: right;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
           $("#tile2").append("</div></div>");
-        }
+        }/*
         if (BCards[i].extras.location == "tile_3") {
           $("#tile3").empty();
           $("#tile3").append("<p>&nbsp;</p>");
@@ -225,7 +247,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           $("#tile3").append("<a href='" + BCards[i].url + "'><p>" + BCards[i].description + "</p></a>");
           $("#tile3").append("<div style='color:grey; padding-block: 4px; text-align: center;'>" + BCards[i].extras.readmeter + "&nbsp;&nbsp;</div>");
           $("#tile3").append("</div></div>");
-        }
+        }*/
         if (BCards[i].extras.location == "collapsible_banner") {
           $("#collapsible_banner").append("<img src='" + BCards[i].imageUrl +"' style='width:100%;height:auto'><div style='color: #222222; font-size: 25px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'><p><b>" + BCards[i].title + "</b></p><span style='font-size:20px'>" + BCards[i].description + "</span></div>");
           if (BCards[i].linkText != "") {
@@ -253,7 +275,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           //$("#ob_tile2").empty();
           //$("#ob_tile2").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a>");
           $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
-        }
+        } /*
         if (BCards[i].extras.location =='ob_tile_3') {
           $("#onboarding_header").empty();
           $("#onboarding_header").append("<p><h3>&nbsp;&nbsp;Get the most of Sweat!</h3></p>");
@@ -262,7 +284,7 @@ braze.subscribeToInAppMessage(function(inAppMessage) {
           //$("#ob_tile3").empty();
           //$("#ob_tile3").append("<a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "''></a>");
           $("#onboarding_set").append("<div id='" + BCards[i].id + "' class='col-sm-4'><a href='" + BCards[i].url + "'><img class='img-fluid' src='" + BCards[i].imageUrl + "'></a></div>");
-        }
+        } */
         if (BCards[i].extras.location =='brand') {
           $("#brand").empty();
           $("#brand").append(BCards[i].extras.brand);
