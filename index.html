@@ -349,14 +349,14 @@
 
       function render_the_banners(banner_objs) {
 
-          if (localStorage.getItem("bannercard-switch") === 'false') {
+          if (localStorage.getItem("bannercard-switch") === 'true') {
               $("#top-banner-container").empty();
+              $("#top-banner-container").append("<div class='MessageInfo'> 1/1 (max-height: 160px) </div><img src='./rs/wireframe_banner_card_4800_600.png' style='width:100%'>");
           }
           else {
             $("#top-banner-container").empty();
-            $("#top-banner-container").append("<div class='MessageInfo'> 1/1 (max-height: 160px) </div><img src='./rs/wireframe_banner_card_4800_600.png' style='width:100%'>");
           }
-          
+
           // get this placement's banner. If it's `null` the user did not qualify for one.
           const topBanner = banner_objs["top_banner"];
           if (topBanner) {
