@@ -114,6 +114,16 @@
          </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="island">
+          <field class='field' style="width: 50%">
+              <label for="i0" class="label">Show BannerCard:</label>
+              <input type="checkbox" onclick="bannerswitch();" id="bannercard-switch"/>
+            </field>
+          </div>
+      </div>
+
       <div class="row">
          <div class="island">
           <field class='field' style="width: 50%">
@@ -166,6 +176,12 @@
 
 
   <script>
+
+    function bannerswitch() {
+      var checkbox = document.getElementById("bannercard-switch");
+      localStorage.setItem("bannercard-switch", checkbox.checked);
+      console.log("BannerCard switch saved:" + checkbox.checked);
+    }
 
     function applyConfig() {
         localStorage.setItem("api_key",document.getElementById('api_key').value);
@@ -237,6 +253,14 @@
       
       $("#api_key_tag").html(localStorage.getItem("api_key"));  
       $("#baseUrl_tag").html(localStorage.getItem("baseUrl"));  
+      
+      if (localStorage.getItem("bannercard-switch")=='true'){
+        $("#bannercard-switch").prop("checked", true);
+      }
+      else {
+          $("#bannercard-switch").prop("checked", false);
+      }
+      
         
     }); 
     
