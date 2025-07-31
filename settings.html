@@ -24,10 +24,6 @@
 
     let BCards;
 
-    // if (localStorage.getItem("baseUrl") === null) {
-    //   localStorage.setItem("baseUrl","https://sondheim.braze.com");
-    //   localStorage.setItem("api_key","598d07ff-8d77-424c-a366-3f495bae886d")
-    // } 
     // initialize the SDK
     braze.initialize(localStorage.api_key, {
       baseUrl: localStorage.baseUrl,
@@ -118,8 +114,12 @@
       <div class="row">
         <div class="island">
           <field class='field' style="width: 50%">
-              <label for="i0" class="label">Show BannerCard:</label>
+              <label for="i0" class="label">Show Banners:</label>
               <input type="checkbox" onclick="bannerswitch();" id="bannercard-switch"/>
+            </field>
+          <field class='field' style="width: 50%">
+              <label for="i0" class="label">Auto requestBannersRefresh();:</label>
+              <input type="checkbox" onclick="bannerrefreshswitch();" id="bannerrefresh-switch"/>
             </field>
           </div>
       </div>
@@ -180,7 +180,12 @@
     function bannerswitch() {
       var checkbox = document.getElementById("bannercard-switch");
       localStorage.setItem("bannercard-switch", checkbox.checked);
-      console.log("BannerCard switch saved:" + checkbox.checked);
+      console.log("Banners switch saved:" + checkbox.checked);
+    }
+    function bannerrefreshswitch() {
+      var checkbox = document.getElementById("bannerrefresh-switch");
+      localStorage.setItem("bannerrefresh-switch", checkbox.checked);
+      console.log("Banner auto requestBannersRefresh for top_banner:" + checkbox.checked);
     }
 
     function applyConfig() {
@@ -259,6 +264,12 @@
       }
       else {
           $("#bannercard-switch").prop("checked", false);
+      }
+      if (localStorage.getItem("bannerrefresh-switch")=='true'){
+        $("#bannerrefresh-switch").prop("checked", true);
+      }
+      else {
+          $("#bannerrefresh-switch").prop("checked", false);
       }
       
         

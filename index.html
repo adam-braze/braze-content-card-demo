@@ -33,27 +33,7 @@
     });
 
     // optionally show all in-app messages without custom handling
-
     braze.automaticallyShowInAppMessages();
-    // braze.subscribeToInAppMessage(function(inAppMessage) {
-
-    //   // check if message is not a control variant
-    //   if (!(inAppMessage.isControl)) {
-    //     // access the key-value pairs, defined as `extras`
-    //     const keyValuePairs = inAppMessage.extras || {};
-    //     // check the value of our key `msg-id` defined in the Braze dashboard
-    //     if (keyValuePairs["msg_id"] === "card") {
-    //       // We don't want to display the push prompt to users on browsers
-    //       // do not call `showInAppMessage`
-    //       $("#tile1").empty();
-    //       $("#tile1").append("<h2>" + inAppMessage.message + "</h2>");
-    //       return;
-    //     }
-    //   }
-
-      // show the in-app message now
-    //  braze.showInAppMessage(inAppMessage);
-    //});
 
     // if you use Content Cards
     braze.subscribeToContentCardsUpdates(function (updates) {
@@ -352,20 +332,21 @@
           if (localStorage.getItem("bannercard-switch") === 'true') {
               $("#top-banner-container").empty();
               $("#top-banner-container").append("<div class='MessageInfo'>    1/1 (max-height: 300px) </div><img src='./rs/wireframe_banners2_1250x313.png' style='width:100%'>");
+
+              // get this placement's banner. If it's `null` the user did not qualify for one.
+              const topBanner = banner_objs["top_banner"];
+              if (topBanner) {
+                // Insert the banner which replacees the innerHTML of that container
+                braze.insertBanner(topBanner, document.getElementById("top-banner-container"));
+                  // Special handling if the user is part of a Control Variant
+                  if (topBanner.isControl) {
+                    container.style.display = 'none';
+                  }     
+              }
+              
           }
           else {
             $("#top-banner-container").empty();
-          }
-
-          // get this placement's banner. If it's `null` the user did not qualify for one.
-          const topBanner = banner_objs["top_banner"];
-          if (topBanner) {
-            // Insert the banner which replacees the innerHTML of that container
-            braze.insertBanner(topBanner, document.getElementById("top-banner-container"));
-              // Special handling if the user is part of a Control Variant
-              if (topBanner.isControl) {
-                container.style.display = 'none';
-              }     
           }
       }
 
@@ -422,9 +403,13 @@
         render_the_cards(braze.getCachedContentCards().cards);
         console.log("Braze - getCachedContentCards: ", braze.getCachedContentCards().cards);
 
-        render_the_banners(braze.getAllBanners());
-        console.log("Braze - getAllBanners: ", braze.getAllBanners());
-
+        if (localStorage.getItem("bannerrefresh-switch") === 'true') {
+          braze.requestBannersRefresh(["top_banner"]);
+        }
+        else {
+          render_the_banners(braze.getAllBanners());
+          console.log("Braze - getAllBanners from local: ", braze.getAllBanners());
+        }
 
       }
 
