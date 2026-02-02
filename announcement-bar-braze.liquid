@@ -1,0 +1,259 @@
+{%- comment -%}
+  Braze Content Cards Integration for Announcement Bar
+  This template replaces the default announcement bar with Braze Content Cards
+{%- endcomment -%}
+
+{%- for block in section.blocks -%}
+  {%- case block.type -%}
+    {%- when 'announcement' -%}
+      <div class="announcement-bar color-{{ block.settings.color_scheme }} gradient" role="region" aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+        {%- comment -%} Braze Content Card Container {%- endcomment -%}
+        <div id="braze-announcement-container" style="display: none;">
+          {%- comment -%} This will be populated by Braze Content Cards {%- endcomment -%}
+        </div>
+        
+        {%- comment -%} Fallback to original content when no Braze cards are available {%- endcomment -%}
+        <div id="fallback-announcement" style="display: block;">
+          {%- if block.settings.text != blank -%}
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="announcement-bar__link link link--text focus-inset animate-arrow">
+            {%- endif -%}
+                <div class="page-width">
+                  <p class="announcement-bar__message {{ block.settings.text_alignment }} h5">
+                    <span>{{ block.settings.text | escape }}</span>
+                    {%- if block.settings.link != blank -%}
+                      {% render 'icon-arrow' %}
+                    {%- endif -%}
+                  </p>
+                </div>
+            {%- if block.settings.link != blank -%}
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- comment -%} Braze Content Cards Script for Announcement Bar {%- endcomment -%}
+<script>
+(function() {
+  'use strict';
+  
+  // Wait for Braze SDK to be available
+  function waitForBrazeSDK() {
+    return new Promise((resolve, reject) => {
+      if (typeof braze !== 'undefined' && braze.isInitialized && braze.isInitialized()) {
+        resolve();
+        return;
+      }
+      
+      const checkInterval = setInterval(() => {
+        if (typeof braze !== 'undefined' && braze.isInitialized && braze.isInitialized()) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100);
+      
+      // Timeout after 5 seconds
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        reject(new Error('Braze SDK not available'));
+      }, 5000);
+    });
+  }
+  
+  // Render Braze Content Card in announcement bar
+  function renderAnnouncementCard(card) {
+    const container = document.getElementById('braze-announcement-container');
+    const fallback = document.getElementById('fallback-announcement');
+    
+    if (!container || !fallback) return;
+    
+    // Create the announcement content
+    let announcementHTML = '<div class="page-width">';
+    announcementHTML += '<p class="announcement-bar__message center h5">';
+    
+    // Add link if card has URL
+    if (card.url && card.url.trim() !== '') {
+      announcementHTML += '<a href="' + card.url + '" class="announcement-bar__link link link--text focus-inset animate-arrow">';
+    }
+    
+    // Add card content
+    announcementHTML += '<span>' + (card.title || card.description || '') + '</span>';
+    
+    // Add arrow icon if there's a link
+    if (card.url && card.url.trim() !== '') {
+      announcementHTML += '{% render "icon-arrow" %}';
+    }
+    
+    // Close link if opened
+    if (card.url && card.url.trim() !== '') {
+      announcementHTML += '</a>';
+    }
+    
+    announcementHTML += '</p></div>';
+    
+    // Insert the content
+    container.innerHTML = announcementHTML;
+    
+    // Show Braze content, hide fallback
+    container.style.display = 'block';
+    fallback.style.display = 'none';
+    
+    // Log impression
+    braze.logContentCardImpressions([card]);
+    
+    // Add click tracking if there's a link
+    if (card.url && card.url.trim() !== '') {
+      const link = container.querySelector('a');
+      if (link) {
+        link.addEventListener('click', function() {
+          braze.logContentCardClick(card);
+        });
+      }
+    }
+    
+    console.log('Braze announcement card rendered:', card);
+  }
+  
+  // Initialize announcement bar with Braze Content Cards
+  function initializeAnnouncementBar() {
+    waitForBrazeSDK()
+      .then(() => {
+        console.log('Braze SDK available, checking for announcement cards...');
+        
+        // Get cached content cards
+        const cachedCards = braze.getCachedContentCards();
+        if (cachedCards && cachedCards.cards) {
+          // Look for announcement bar cards
+          const announcementCards = cachedCards.cards.filter(card => 
+            card.extras && card.extras.location === 'announcement_bar'
+          );
+          
+          if (announcementCards.length > 0) {
+            // Use the most recent announcement card
+            const latestCard = announcementCards.reduce((latest, current) => 
+              current.updated > latest.updated ? current : latest
+            );
+            renderAnnouncementCard(latestCard);
+          } else {
+            console.log('No announcement bar cards found');
+          }
+        }
+        
+        // Subscribe to content card updates
+        braze.subscribeToContentCardsUpdates(function(updates) {
+          console.log('Content cards updated, checking for announcement cards...');
+          
+          const announcementCards = updates.cards.filter(card => 
+            card.extras && card.extras.location === 'announcement_bar'
+          );
+          
+          if (announcementCards.length > 0) {
+            const latestCard = announcementCards.reduce((latest, current) => 
+              current.updated > latest.updated ? current : latest
+            );
+            renderAnnouncementCard(latestCard);
+          }
+        });
+      })
+      .catch((error) => {
+        console.log('Braze SDK not available, using fallback announcement:', error.message);
+        // Keep fallback content visible
+      });
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAnnouncementBar);
+  } else {
+    initializeAnnouncementBar();
+  }
+  
+})();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.announcement-bar.name",
+  "max_blocks": 12,
+  "class": "announcement-bar-section",
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label",
+          "info": "This text will be used as fallback when no Braze Content Cards are available"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.announcement-bar.blocks.announcement.settings.text_alignment.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.announcement-bar.blocks.announcement.settings.text_alignment.options__2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.announcement-bar.blocks.announcement.settings.text_alignment.options__3.label"
+            }
+          ],
+          "default": "center",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text_alignment.label"
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "t:sections.all.colors.accent_1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:sections.all.colors.accent_2.label"
+            },
+            {
+              "value": "background-1",
+              "label": "t:sections.all.colors.background_1.label"
+            },
+            {
+              "value": "background-2",
+              "label": "t:sections.all.colors.background_2.label"
+            },
+            {
+              "value": "inverse",
+              "label": "t:sections.all.colors.inverse.label"
+            }
+          ],
+          "default": "accent-1",
+          "label": "t:sections.all.colors.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label",
+          "info": "This link will be used as fallback when no Braze Content Cards are available"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

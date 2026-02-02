@@ -1,0 +1,487 @@
+{%- comment -%}
+  Collection List Section with Braze Recommendations
+  File: sections/collection-list.liquid
+{%- endcomment -%}
+
+{%- liquid
+  assign section_id = section.id
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+  assign image_ratio = section.settings.image_ratio
+  assign image_shape = section.settings.image_shape
+  assign show_view_all = section.settings.show_view_all
+  assign view_all_style = section.settings.view_all_style
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="section-{{ section.id }}-padding">
+    {%- unless heading == blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin">
+        <h2 id="SectionHeading-{{ section_id }}" class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ heading }}
+        </h2>
+        {%- if subheading != blank -%}
+          <div class="rich-text__text rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+            {{ subheading }}
+          </div>
+        {%- endif -%}
+        {%- if show_view_all and section.settings.button_label != blank -%}
+          <a href="{{ section.settings.button_link }}" class="link underlined-link large-up-hide{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+
+    {%- comment -%} Braze Recommendations Container {%- endcomment -%}
+    <div id="braze-recommendations-container-{{ section_id }}" class="collection-list-wrapper page-width-desktop" style="display: none;">
+      <div class="collection-list collection-list--{{ image_shape }} collection-list--{{ columns_desktop }}-column-desktop collection-list--{{ columns_mobile }}-column-mobile">
+        {%- comment -%} This will be populated by Braze Content Cards {%- endcomment -%}
+      </div>
+    </div>
+
+    {%- comment -%} Fallback to original collections when no Braze recommendations are available {%- endcomment -%}
+    <div id="fallback-collections-{{ section_id }}" class="collection-list-wrapper page-width-desktop" style="display: block;">
+      <div class="collection-list collection-list--{{ image_shape }} collection-list--{{ columns_desktop }}-column-desktop collection-list--{{ columns_mobile }}-column-mobile">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'collection' -%}
+              {%- liquid
+                assign collection = collections[block.settings.collection]
+                assign collection_image = collection.featured_image
+                assign collection_image_alt = collection_image.alt | default: collection.title
+                assign collection_title = collection.title | default: collection.handle
+                assign collection_description = collection.description | default: ''
+                assign collection_url = collection.url
+                assign collection_product_count = collection.products_count
+              -%}
+              <div class="collection-list__item grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }}>
+                {%- if collection != blank -%}
+                  <div class="card-wrapper underline-links-hover">
+                    <div class="card card--{{ image_shape }} card--media color-{{ settings.card_color_scheme }} gradient" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                      <div class="card__inner color-{{ settings.card_color_scheme }} gradient ratio" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                        {%- if collection_image -%}
+                          <div class="card__media">
+                            <div class="media media--transparent media--hover-effect">
+                              <img src="{{ collection_image | image_url: width: 533 }}" alt="{{ collection_image_alt }}" class="motion-reduce" loading="lazy" width="{{ collection_image.width }}" height="{{ collection_image.height }}">
+                            </div>
+                          </div>
+                        {%- endif -%}
+                        <div class="card__content">
+                          <div class="card__information">
+                            <h3 class="card__heading">
+                              <a href="{{ collection_url }}" class="full-unstyled-link" aria-labelledby="StandardCardNoMediaLink-template--{{ section_id }}-{{ collection.id }}-{{ forloop.index }}">
+                                {{ collection_title }}
+                              </a>
+                            </h3>
+                            {%- if collection_description != blank -%}
+                              <p class="card__caption">{{ collection_description | truncate: 100 }}</p>
+                            {%- endif -%}
+                            {%- if collection_product_count > 0 -%}
+                              <p class="card__caption">{{ collection_product_count }} {{ 'sections.collection_list.products' | t }}</p>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {%- else -%}
+                  <div class="card-wrapper underline-links-hover">
+                    <div class="card card--{{ image_shape }} card--media color-{{ settings.card_color_scheme }} gradient" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                      <div class="card__inner color-{{ settings.card_color_scheme }} gradient ratio" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                        <div class="card__media">
+                          <div class="media media--transparent media--hover-effect">
+                            {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                          </div>
+                        </div>
+                        <div class="card__content">
+                          <div class="card__information">
+                            <h3 class="card__heading">
+                              <a href="#" class="full-unstyled-link">
+                                {{ 'onboarding.collection_title' | t }}
+                              </a>
+                            </h3>
+                            <p class="card__caption">{{ 'onboarding.collection_description' | t }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Braze Recommendations Script {%- endcomment -%}
+<script>
+(function() {
+  'use strict';
+  
+  const sectionId = '{{ section_id }}';
+  const maxRecommendations = {{ columns_desktop | default: 4 }};
+  
+  // Wait for Braze SDK to be available
+  function waitForBrazeSDK() {
+    return new Promise((resolve, reject) => {
+      if (typeof braze !== 'undefined' && braze.isInitialized && braze.isInitialized()) {
+        resolve();
+        return;
+      }
+      
+      const checkInterval = setInterval(() => {
+        if (typeof braze !== 'undefined' && braze.isInitialized && braze.isInitialized()) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100);
+      
+      // Timeout after 5 seconds
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        reject(new Error('Braze SDK not available'));
+      }, 5000);
+    });
+  }
+  
+  // Create collection card HTML
+  function createCollectionCard(card, index) {
+    const imageUrl = card.imageUrl || '{{ "collection-1" | placeholder_svg_tag: "placeholder-svg" }}';
+    const title = card.title || 'Collection';
+    const description = card.description || '';
+    const url = card.url || '#';
+    const productCount = card.extras?.product_count || '';
+    
+    return `
+      <div class="collection-list__item grid__item" data-braze-card-id="${card.id}">
+        <div class="card-wrapper underline-links-hover">
+          <div class="card card--{{ image_shape }} card--media color-{{ settings.card_color_scheme }} gradient" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+            <div class="card__inner color-{{ settings.card_color_scheme }} gradient ratio" style="--ratio-percent: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+              <div class="card__media">
+                <div class="media media--transparent media--hover-effect">
+                  <img src="${imageUrl}" alt="${title}" class="motion-reduce" loading="lazy" width="533" height="400">
+                </div>
+              </div>
+              <div class="card__content">
+                <div class="card__information">
+                  <h3 class="card__heading">
+                    <a href="${url}" class="full-unstyled-link braze-collection-link" data-braze-card-id="${card.id}">
+                      ${title}
+                    </a>
+                  </h3>
+                  ${description ? `<p class="card__caption">${description}</p>` : ''}
+                  ${productCount ? `<p class="card__caption">${productCount} products</p>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Render Braze recommendations
+  function renderBrazeRecommendations(cards) {
+    const container = document.getElementById(`braze-recommendations-container-${sectionId}`);
+    const fallback = document.getElementById(`fallback-collections-${sectionId}`);
+    
+    if (!container || !fallback) return;
+    
+    // Filter and sort recommendations
+    const recommendationCards = cards
+      .filter(card => card.extras && card.extras.location === 'collections_recommendations')
+      .sort((a, b) => (b.extras.priority || 0) - (a.extras.priority || 0))
+      .slice(0, maxRecommendations);
+    
+    if (recommendationCards.length === 0) {
+      console.log('No collection recommendations found');
+      return;
+    }
+    
+    // Create HTML for all recommendations
+    const recommendationsHTML = recommendationCards
+      .map((card, index) => createCollectionCard(card, index))
+      .join('');
+    
+    // Insert the content
+    container.querySelector('.collection-list').innerHTML = recommendationsHTML;
+    
+    // Show Braze content, hide fallback
+    container.style.display = 'block';
+    fallback.style.display = 'none';
+    
+    // Log impressions
+    braze.logContentCardImpressions(recommendationCards);
+    
+    // Add click tracking
+    container.querySelectorAll('.braze-collection-link').forEach(link => {
+      const cardId = link.dataset.brazeCardId;
+      const card = recommendationCards.find(c => c.id === cardId);
+      
+      link.addEventListener('click', function(e) {
+        if (card) {
+          braze.logContentCardClick(card);
+        }
+      });
+    });
+    
+    console.log('Braze collection recommendations rendered:', recommendationCards);
+  }
+  
+  // Initialize recommendations
+  function initializeRecommendations() {
+    waitForBrazeSDK()
+      .then(() => {
+        console.log('Braze SDK available, checking for collection recommendations...');
+        
+        // Get cached content cards
+        const cachedCards = braze.getCachedContentCards();
+        if (cachedCards && cachedCards.cards) {
+          renderBrazeRecommendations(cachedCards.cards);
+        }
+        
+        // Subscribe to content card updates
+        braze.subscribeToContentCardsUpdates(function(updates) {
+          console.log('Content cards updated, checking for collection recommendations...');
+          renderBrazeRecommendations(updates.cards);
+        });
+      })
+      .catch((error) => {
+        console.log('Braze SDK not available, using fallback collections:', error.message);
+        // Keep fallback content visible
+      });
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeRecommendations);
+  } else {
+    initializeRecommendations();
+  }
+  
+})();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.collection-list.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Collections",
+      "label": "t:sections.collection-list.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "t:sections.all.subheading.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.collection-list.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.collection-list.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.collection-list.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.collection-list.settings.image_ratio.label"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.image_shape.options__1.label"
+        },
+        {
+          "value": "arch",
+          "label": "t:sections.all.image_shape.options__2.label"
+        },
+        {
+          "value": "blob",
+          "label": "t:sections.all.image_shape.options__3.label"
+        },
+        {
+          "value": "chevronleft",
+          "label": "t:sections.all.image_shape.options__4.label"
+        },
+        {
+          "value": "chevronright",
+          "label": "t:sections.all.image_shape.options__5.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.all.image_shape.options__6.label"
+        },
+        {
+          "value": "parallelogram",
+          "label": "t:sections.all.image_shape.options__7.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.all.image_shape.options__8.label"
+        }
+      ],
+      "default": "default",
+      "label": "t:sections.all.image_shape.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.collection-list.settings.columns_desktop.label",
+      "info": "Maximum number of Braze recommendations to display"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection-list.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.collection-list.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.collection-list.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.collection-list.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "t:sections.collection-list.blocks.collection.name",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:sections.collection-list.blocks.collection.settings.collection.label",
+          "info": "This collection will be used as fallback when no Braze recommendations are available"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collection-list.presets.name",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
